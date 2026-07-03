@@ -1,0 +1,46 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime artifacts -- staged post drafts and their review-lifecycle records.
+# These hold real (or draft) post content, not source code, and are generated
+# by running the tool -- never hand-authored, never committed.
+/content/staging/
+
+# Real, unreviewed personal-brand draft content (raw source text before it's
+# staged). Never committed to this public repo, for the same reason
+# content/staging/ isn't: it's unapproved, unpublished content about a real
+# person, not source code or a generic usage example.
+/content/drafts/
+/content/_source/
+
+# Scratch
+.tmp_*
+*.tmp
+*.bak
+*.orig
+scratch/

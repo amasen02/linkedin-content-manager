@@ -1,0 +1,3 @@
+This file exists so the Docker usage example and README have something real to
+stage. Replace it with your own post body, or point --body-file at any plain
+text file -- hashtags and metadata are passed as separate CLI flags, not frontmatter.

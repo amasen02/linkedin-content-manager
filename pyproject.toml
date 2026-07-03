@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "linkedin-content-manager"
+version = "1.0.0"
+description = "Stage LinkedIn post drafts for human review and manual posting. Never posts automatically."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Ama Senevirathne" }]
+dependencies = []
+
+[project.scripts]
+lcm = "linkedin_content_manager.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/amasen02/linkedin-content-manager"
+Issues = "https://github.com/amasen02/linkedin-content-manager/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,8 @@
+.git/
+.github/
+tests/
+content/staging/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/

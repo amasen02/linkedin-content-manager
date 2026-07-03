@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a defect so it can be reproduced and fixed.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please search existing issues first to avoid duplicates.
+        Do not paste real, unpublished post content you don't want public.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+      placeholder: When I ran ..., I expected ..., but instead ...
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact command you ran (redact any content you don't want shared).
+      render: shell
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Post / draft model
+        - Draft store / review lifecycle
+        - CLI
+        - Other / not sure
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS + `python --version`.
+      placeholder: Windows 11, Python 3.12.9
+    validations:
+      required: false
+  - type: textarea
+    id: output
+    attributes:
+      label: Output / error
+      description: Paste relevant CLI output.
+      render: shell
+    validations:
+      required: false
