@@ -32,3 +32,18 @@ jobs:
         run: |
           python -m pip install --upgrade build
           python -m build
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build image
+        run: docker build -t linkedin-content-manager:ci .
+
+      - name: Smoke test the built image (stage a draft, then list it back)
+        run: |
+          docker run --rm --entrypoint sh linkedin-content-manager:ci -c "
+            python -m linkedin_content_manager new --title 'CI smoke test' --body-file content/example-body.txt &&
+            python -m linkedin_content_manager list
+          "
