@@ -1,6 +1,6 @@
 # linkedin-content-manager has zero runtime dependencies, so a single slim stage
 # is enough - there is nothing to compile and nothing to prune between stages.
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 RUN useradd --create-home --uid 10001 lcm
 WORKDIR /app
