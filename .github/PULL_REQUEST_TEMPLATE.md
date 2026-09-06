@@ -20,7 +20,7 @@
 ## Tests
 
 - [ ] Unit tests added or updated
-- [ ] `tests/test_no_network.py` still passes (no networking import was added)
+- [ ] `tests/test_no_network.py` still passes (no import outside its allowlist was added)
 - [ ] `python -m unittest discover -s tests` passes locally
 
 ## Checklist

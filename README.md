@@ -9,25 +9,30 @@
 
 A small, zero-dependency CLI that stages LinkedIn posts through a review lifecycle —
 draft → pending review → approved → posted — for a human to read, edit, and post
-themselves. It **never** posts to LinkedIn, and it structurally cannot: there is no
-LinkedIn API client anywhere in this codebase.
+themselves. It **never** posts to LinkedIn: there is no LinkedIn API client anywhere
+in this codebase, and CI rejects any source file that imports a module outside a short
+standard-library allowlist.
 
 ## Why this tool doesn't post for you
 
 LinkedIn's Terms of Service prohibit automating actions, including posting, on a
 personal account. Most "LinkedIn automation" tools either ignore that or rely on
 fragile unofficial endpoints that get accounts flagged. This one takes the opposite
-approach: it only ever manages local files, and a dedicated test enforces that as an
-architectural invariant rather than a promise.
+approach: it only ever manages local files, and a dedicated test enforces that in CI
+rather than leaving it to reviewer memory.
 
 - **Zero runtime dependencies.** Standard library only — `argparse`, `dataclasses`,
   `json`, `pathlib`.
-- **Zero network access, provably.** [`tests/test_no_network.py`](tests/test_no_network.py)
-  parses every source file with Python's `ast` module and fails the build if any
-  networking import (`socket`, `urllib`, `http`, `requests`, `httpx`, `aiohttp`,
-  `ftplib`, `smtplib`, `telnetlib`) ever appears under `src/linkedin_content_manager/`.
-  This isn't a comment promising good behaviour — it's a test that catches a future
-  regression the moment someone adds one of those imports.
+- **No network access, enforced by an import allowlist.**
+  [`tests/test_no_network.py`](tests/test_no_network.py) parses every source file with
+  Python's `ast` module and fails the build if anything under
+  `src/linkedin_content_manager/` imports a module outside `argparse`, `dataclasses`,
+  `datetime`, `enum`, `json`, `pathlib`, `re`, `sys`, `uuid` and the package itself, or
+  uses `__import__`, `eval`, `exec`, or `compile`. Being an allowlist rather than a list
+  of banned modules, it also fails closed on `subprocess`, `asyncio`, `ctypes` and a
+  dynamic `importlib.import_module("socket")` — the routes a denylist waves through.
+  It is a static scan of `src/`, not a runtime sandbox: it catches the change in review,
+  it does not confine the interpreter.
 - **A real review lifecycle**, not just a text file. Every draft moves through
   explicit states with illegal transitions rejected (you cannot jump straight from
   `draft` to `posted`; `posted` is terminal).
@@ -139,14 +144,14 @@ tests/
   test_models.py      PostDraft rendering, character counting, dict round-trip
   test_store.py       CRUD + every lifecycle transition, legal and illegal
   test_cli.py          end-to-end CLI flows against a temp staging directory
-  test_no_network.py    static AST scan — no networking import may ever appear in src/
+  test_no_network.py    static AST scan — src/ may only import an allowlisted stdlib set
 ```
 
 ## Contributing
 
 Contributions are welcome — bug fixes, new lifecycle states, better docs. See
 [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, the coding bar, and the one
-non-negotiable rule (no networking imports, ever). Please be mindful of the
+non-negotiable rule (the standard-library import allowlist). Please be mindful of the
 [Code of Conduct](CODE_OF_CONDUCT.md). Use the issue templates; green CI is required on
 every pull request. Report security issues privately per [`SECURITY.md`](SECURITY.md) —
 never as a public issue.

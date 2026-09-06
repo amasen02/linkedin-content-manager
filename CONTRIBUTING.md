@@ -15,10 +15,17 @@ they keep the tone, quality, and the one hard architectural rule of this codebas
 
 This tool exists to stage LinkedIn posts for a human to review and post by hand —
 never to post automatically. LinkedIn's Terms of Service prohibit automating actions
-on a personal account, so **no pull request may add an import of a networking module**
-(`socket`, `urllib`, `http`, `requests`, `httpx`, `aiohttp`, or similar) anywhere under
-`src/linkedin_content_manager/`. `tests/test_no_network.py` enforces this with a static
-AST scan and will fail CI if violated. A PR that touches this constraint will not be merged.
+on a personal account, so **`src/linkedin_content_manager/` may only import modules on
+the allowlist** in `tests/test_no_network.py` (`argparse`, `dataclasses`, `datetime`,
+`enum`, `json`, `pathlib`, `re`, `sys`, `uuid`, and the package itself), and may not use
+`__import__`, `eval`, `exec`, or `compile`. That rules out networking modules, and also
+`subprocess`, `asyncio`, `ctypes` and dynamic imports — the routes a list of banned
+module names would miss. A static AST scan fails CI if violated.
+
+Widening the allowlist changes the tool's core promise, so it is not a detail: say in
+the pull request why the new module is needed and why it cannot open a connection or
+start a process. A PR that removes the check, or adds a module able to do either, will
+not be merged.
 
 ## Coding standards
 
